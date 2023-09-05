@@ -2,6 +2,7 @@ import os
 import shutil
 # origin = '../duplicate-checker'
 target = './duplicate-files'
+target1 = './duplicate-original-files'
 def install_and_import(package):
     import importlib
     try:
@@ -22,9 +23,9 @@ for path, subfolders, filenames in os.walk('./duplicate-image'):
 
 folders = list(set(folders))
 print(f"searching in {folders}")
-search = difPy.dif(folders)
-# print(search.result)
-
+search = difPy.dif(folders,similarity='similar')
+# print(search.lower_quality)
+# exit()
 for key, data in search.result.items():
     location = data["location"]
     matches = data["matches"]
@@ -33,5 +34,11 @@ for key, data in search.result.items():
         loc = d['location']
         splitloc = "/".join(loc.split("/")[:-1])
         os.makedirs(f"{target}/{splitloc}", exist_ok = True)
-        shutil.copy(loc,f"{target}/{splitloc}")
+        # shutil.copy(loc,f"{target}/{splitloc}")
+    
+        loc1 = location
+        splitloc = "/".join(loc1.split("/")[:-1])
+        os.makedirs(f"{target1}/{splitloc}", exist_ok = True)
+        shutil.copy(loc1,f"{target1}/{splitloc}")
+        # os.remove(loc)
         print("removed file in : =>  ",loc)
